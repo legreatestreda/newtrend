@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { PrimaryLayout } from '@/layouts';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'New trend',
@@ -15,9 +16,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <PrimaryLayout>
-          {children}
-        </PrimaryLayout>
+        <Providers>
+          <PrimaryLayout>{children}</PrimaryLayout>
+        </Providers>
       </body>
     </html>
   );

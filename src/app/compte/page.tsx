@@ -17,16 +17,12 @@ export default function ComptePage() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // 🔒 protection route propre NextAuth
   useEffect(() => {
-    if (status === 'loading') return;
-
     if (status === 'unauthenticated') {
       router.replace('/signin');
     }
   }, [status, router]);
 
-  // ⏳ loading state obligatoire (sinon flash + crash SSR)
   if (status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-black text-xs uppercase tracking-widest text-zinc-700">
@@ -34,7 +30,6 @@ export default function ComptePage() {
       </div>
     );
   }
-
   const info = [
     {
       icon: FiMail,
