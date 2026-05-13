@@ -6,7 +6,7 @@ import { FiArrowRight, FiHeart, FiTrash2 } from 'react-icons/fi';
 import { useFavoris } from '@/hooks/useFavoris';
 
 export default function FavorisPage() {
-  const { favoris, remove } = useFavoris();
+  const { favoris, toggle } = useFavoris();
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -68,7 +68,7 @@ export default function FavorisPage() {
               >
 
                 <button
-                  onClick={() => remove(v.id)}
+                  onClick={() => toggle(v)}
                   className="absolute right-2 top-2 z-10 text-zinc-500 hover:text-red-400"
                 >
                   <FiTrash2 size={13} />
