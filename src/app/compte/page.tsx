@@ -17,14 +17,23 @@ export default function ComptePage() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // redirection si pas connecté
+  // 🔒 protection route propre NextAuth
   useEffect(() => {
-    const hasSession = localStorage.getItem('user_session');
+    if (status === 'loading') return;
 
-    if (!hasSession) {
+    if (status === 'unauthenticated') {
       router.replace('/signin');
     }
-  }, [router]);
+  }, [status, router]);
+
+  // ⏳ loading state obligatoire (sinon flash + crash SSR)
+  if (status === 'loading') {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-xs uppercase tracking-widest text-zinc-700">
+        Chargement...
+      </div>
+    );
+  }
 
   const info = [
     {
@@ -70,10 +79,7 @@ export default function ComptePage() {
           </div>
 
           <button
-            onClick={() => {
-              localStorage.removeItem('user_session');
-              signOut({ callbackUrl: '/signin' });
-            }}
+            onClick={() => signOut({ callbackUrl: '/signin' })}
             className="rounded-full border border-zinc-700 px-4 py-2 text-[10px] uppercase tracking-widest text-zinc-400 hover:border-red-500 hover:text-red-400"
           >
             Déconnexion <FiLogOut className="ml-1 inline" />
@@ -98,6 +104,7 @@ export default function ComptePage() {
                   className="flex gap-3 rounded-xl border border-zinc-900 bg-zinc-900/30 p-3"
                 >
                   <Icon className="text-zinc-500" size={15} />
+
                   <div>
                     <p className="text-[9px] uppercase text-zinc-600">
                       {label}
