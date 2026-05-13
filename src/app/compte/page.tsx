@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 import {
   FiUser,
@@ -15,32 +15,16 @@ import {
 
 export default function ComptePage() {
   const router = useRouter();
-  const [hydrated, setHydrated] = useState(false);
+  const { data: session, status } = useSession();
 
-  const session = null;
-  const status = 'authenticated';
-
+  // redirection si pas connecté
   useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-
     const hasSession = localStorage.getItem('user_session');
 
     if (!hasSession) {
       router.replace('/signin');
     }
-  }, [hydrated, router]);
-
-  if (!hydrated) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-black text-xs uppercase tracking-widest text-zinc-700">
-        Chargement...
-      </div>
-    );
-  }
+  }, [router]);
 
   const info = [
     {
@@ -63,7 +47,7 @@ export default function ComptePage() {
   return (
     <div className="min-h-screen bg-black text-white">
 
-      {/* HERO — remonté */}
+      {/* HERO */}
       <div className="relative h-[34vh] w-full overflow-hidden">
         <Image
           src="/assets/compte-hero.webp"
@@ -72,7 +56,7 @@ export default function ComptePage() {
           className="object-cover opacity-30"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-transparent" />
 
         <div className="absolute bottom-0 flex w-full items-end justify-between px-6 pb-4">
           <div>
@@ -97,9 +81,8 @@ export default function ComptePage() {
         </div>
       </div>
 
-      {/* CONTENT — remonté */}
+      {/* CONTENT */}
       <div className="mx-auto max-w-6xl px-6 py-8">
-
         <div className="grid gap-8 lg:grid-cols-2">
 
           {/* LEFT */}
@@ -126,7 +109,7 @@ export default function ComptePage() {
             </div>
           </div>
 
-          {/* RIGHT — remonté */}
+          {/* RIGHT */}
           <div className="flex items-center gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4">
 
             <div className="relative h-12 w-12 overflow-hidden rounded-full bg-zinc-800">
